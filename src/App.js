@@ -12,6 +12,7 @@ import ButtonBar from './components/ButtonBar';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import BookingsTable from './components/BookingsTable';
 import Icon from './components/Icon';
+import ComboChart from './components/ComboChart';
 
 import packageJson from '../package.json';
 import { getHost } from './services/hostService';
@@ -164,6 +165,30 @@ function App() {
     });
   }, []);
 
+  const [seasonalBooking, setSeasonalBooking] = useState([]);
+  useEffect(() => {
+    try {
+      axios.get(`${getHost()}/api/v1/seasonalBooking`, {}).then((response) => {
+        const data = response.data.seasonalBooking;
+        setSeasonalBooking(data);
+      });
+    } catch (error) {
+      
+    }
+  }, []);
+
+  const [seasonalCheckin,  setSeasonalCheckin] = useState([]);
+  useEffect(() => {
+    try {
+      axios.get(`${getHost()}/api/v1/seasonalCheckin`, {}).then((response) => {
+        const data = response.data.seasonalCheckin;
+        setSeasonalCheckin(data);
+      });
+    } catch (error) {
+      
+    }
+  }, []);
+
   useEffect(() => {
     const rows = bookings.map((booking) => {
       const haveEqualId = (record) => record.booking_id === booking.booking_id;
@@ -260,6 +285,7 @@ function App() {
           </Header>
           <LineChart data={seasonalIncome} yAxisLabel={'Income ($)'} displayLegend />
             {/* TODO: Add combo chart */}
+            <ComboChart></ComboChart>
         </div>
         <div className='grid col-span-2 chart-container'>
           <Header className='mb-4'>
